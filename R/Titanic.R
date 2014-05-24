@@ -291,13 +291,18 @@ make_predictions <- function(FileDir="../data"){
   features_test <- read.csv(paste0(FileDir, "/features_test.csv"), stringsAsFactors=TRUE)   
   
   features_test$Pclass <- as.factor(features_test$Pclass)
-  features_test$FareFamily <- median(features_test$FareFamily)
+  features_test$FareFamily[is.na(features_test$FareFamily)] <- median(features_test$FareFamily, na.rm=TRUE)
   
   test_preds <- predict(model, features_test)
   
+#   feats <- names(attributes(model$terms)$dataClasses)
+#   data_cols <- names(features_test)
+  
   test_dat <- read.csv(paste0(FileDir, TestFile))
   
-  output <- data.frame(PassengerId=test_dat$PassengerId, pred=test_preds)
+  output <- data.frame(PassengerId=test_dat$PassengerId, Survived=test_preds)
+
+  write.csv(output, paste0(FileDir, "/submission1.csv"), row.names=FALSE)
 }
 
 
