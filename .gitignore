@@ -13,3 +13,4 @@ model*
 features_train.csv
 features_test.csv
 *.pdf
+submission*
